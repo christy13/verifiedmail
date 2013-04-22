@@ -30,8 +30,6 @@ class MhashesController < ApplicationController
   def new
     if current_user
       @mhash = Mhash.new
-      @mhash.user = current_user
-      @mhash.hash = params[mhash]
     end
 
     respond_to do |format|
@@ -48,7 +46,11 @@ class MhashesController < ApplicationController
   # POST /mhashes
   # POST /mhashes.json
   def create
-    @mhash = Mhash.new(params[:mhash])
+    if current_user
+      @mhash = Mhash.new
+      @mhash.user = current_user
+      @mhash.data = params[:data]
+    end
 
     respond_to do |format|
       if @mhash.save
