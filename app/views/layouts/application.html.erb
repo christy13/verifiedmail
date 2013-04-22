@@ -9,7 +9,7 @@
 <body>
 <% if current_user %>
   Signed in as <%= current_user.name %>!
-  Your email address if <%= current_user.email %>
+  Your email address is <%= current_user.email %>
   <%= "I love you Drew!" if current_user.name == "drewdennison" %>
   <%= link_to "Sign out", signout_path %>
 <% else %>
