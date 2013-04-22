@@ -184,6 +184,7 @@
         info.style.display = 'block'
       }
     </script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
   </head>
   <body>
     <div id="page">
@@ -206,6 +207,18 @@
           <h1>I love you Drew!</h1>
           <h2>Want to have sex???</h2>
         </div>
+      </div>
+
+      <div>
+        <label>Yes</label>
+        <input type="checkbox" class="yes">
+        <label>Yes</label>
+        <input type="checkbox" class="yes">
+        <script type="text/javascript">
+        $(".yes").click(function() {
+          alert("You better! ;)")
+        })
+        </script>
       </div>
 
       <div id="footer">&nbsp;</div>
