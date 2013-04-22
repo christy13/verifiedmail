@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @mhash.user_id %>
+</p>
+
+<p>
+  <b>Hash:</b>
+  <%= @mhash.hash %>
+</p>
+
+
+<%= link_to 'Edit', edit_mhash_path(@mhash) %> |
+<%= link_to 'Back', mhashes_path %>
