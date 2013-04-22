@@ -31,7 +31,7 @@ class MhashesController < ApplicationController
     if current_user
       @mhash = Mhash.new
       @mhash.user = current_user
-      @mhash.hash = params[hash]
+      @mhash.hash = params[mhash]
     end
 
     respond_to do |format|
