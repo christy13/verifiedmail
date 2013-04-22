@@ -2,7 +2,9 @@ class MhashesController < ApplicationController
   # GET /mhashes
   # GET /mhashes.json
   def index
-    @mhashes = Mhash.all
+    if current_user
+      @mhash = Mhash.where(:user => current_user.id).all
+    end
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,7 +15,9 @@ class MhashesController < ApplicationController
   # GET /mhashes/1
   # GET /mhashes/1.json
   def show
-    @mhash = Mhash.find(params[:id])
+    if current_user
+      @mhash = Mhash.where(:user => current_user.id).find(params[:hash_id]).first
+    end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -24,7 +28,11 @@ class MhashesController < ApplicationController
   # GET /mhashes/new
   # GET /mhashes/new.json
   def new
-    @mhash = Mhash.new
+    if current_user
+      @mhash = Mhash.new
+      @mhash.user = current_user
+      @mhash.hash = params[hash]
+    end
 
     respond_to do |format|
       format.html # new.html.erb
