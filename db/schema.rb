@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(:version => 20130422023330) do
 
   create_table "mhashes", :force => true do |t|
     t.integer  "user_id"
-    t.string   "hash"
+    t.string   "data"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

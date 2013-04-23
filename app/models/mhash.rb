@@ -1,3 +1,3 @@
 class Mhash < ActiveRecord::Base
-  attr_accessible :hash, :user_id
+  attr_accessible :data, :user_id
 end
