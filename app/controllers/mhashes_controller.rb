@@ -70,4 +70,15 @@ class MhashesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  # Checks if mhash exists
+  def verify
+    @user = User.where(email: params[:email]).first
+    @check = @user && @user.mhashes.where(data: params[:data]).first
+    @date = @check && @check.created_at rescue nil
+
+    respond_to do |format|
+      format.json { render json: { success: @check, date: @date } }
+    end
+  end
 end

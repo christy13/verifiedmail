@@ -2,7 +2,7 @@
 
 <p>
   <b>User:</b>
-  <%= @mhash.user_id %>
+  <%= @mhash.email %>
 </p>
 
 <p>
@@ -10,6 +10,4 @@
   <%= @mhash.hash %>
 </p>
 
-
-<%= link_to 'Edit', edit_mhash_path(@mhash) %> |
 <%= link_to 'Back', mhashes_path %>
