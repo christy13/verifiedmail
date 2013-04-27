@@ -48,7 +48,7 @@ class MhashesController < ApplicationController
   def create
     if current_user
       @mhash = Mhash.new
-      @mhash.user = current_user
+      current_user.mhashes < @mhash
       @mhash.data = params[:data]
     end
 
