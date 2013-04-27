@@ -48,8 +48,8 @@ class MhashesController < ApplicationController
   def create
     if current_user
       @mhash = Mhash.new
-      current_user.mhashes < @mhash
       @mhash.data = params[:data]
+      current_user.mhashes << @mhash
     end
 
     respond_to do |format|
