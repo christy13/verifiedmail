@@ -22,12 +22,10 @@ class MhashesController < ApplicationController
       current_user.mhashes << @mhash
     end
 
-    respond_to do |format|
-      if @mhash.save
-        render json: { success: true, date: @mhash.created_at }, status: :created, location: @mhash
-      else
-        render json: { success: false, date: null }, status: :unprocessable_entity 
-      end
+    if @mhash.save
+      render json: { success: true, date: @mhash.created_at }, status: :created, location: @mhash
+    else
+      render json: { success: false, date: null }, status: :unprocessable_entity 
     end
   end
 
