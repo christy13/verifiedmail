@@ -1,21 +1,18 @@
-<h1>Listing mhashes</h1>
+<h1>Listing mhashes for <%= current_user.email %></h1>
 
 <table>
   <tr>
-    <th>User</th>
     <th>Hash</th>
     <th></th>
     <th></th>
     <th></th>
   </tr>
 
-<% @mhashes.each do |mhash| %>
+<% @mhashes.each do |mh| %>
   <tr>
-    <td><%= mhash.user_id %></td>
-    <td><%= mhash.hash %></td>
-    <td><%= link_to 'Show', mhash %></td>
-    <td><%= link_to 'Edit', edit_mhash_path(mhash) %></td>
-    <td><%= link_to 'Destroy', mhash, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= mh.data %></td>
+    <td><%= mh.created_at %></td>
+    <td><%= link_to 'Destroy', mh, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
 </table>

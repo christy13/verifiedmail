@@ -3,7 +3,7 @@ class MhashesController < ApplicationController
   # GET /mhashes.json
   def index
     if current_user
-      @mhash = Mhash.where(:user_id => current_user.id).all
+      @mhashes = Mhash.where(:user_id => current_user.id).all
     end
 
     respond_to do |format|
@@ -16,7 +16,7 @@ class MhashesController < ApplicationController
   # GET /mhashes/1.json
   def show
     if current_user
-      @mhash = Mhash.where(:user_id => current_user.id).find(params[:hash_id]).first
+      @mhash = Mhash.where(:user_id => current_user.id).find(params[:id]).first
     end
 
     respond_to do |format|
