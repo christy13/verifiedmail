@@ -4,7 +4,7 @@ class MhashesController < ApplicationController
   # eventually delete for security reasons
   def index
     if current_user
-      @mhashes = Mhash.where(:user_id => current_user.id).all
+      @mhashes = Mhash.where(user_id: current_user.id).all
     end
 
     respond_to do |format|
@@ -32,8 +32,10 @@ class MhashesController < ApplicationController
   # DELETE /mhashes/1
   # DELETE /mhashes/1.json
   def destroy
-    @mhash = Mhash.find(params[:id])
-    @mhash.destroy
+    if current_user
+      @mhash = Mhash.where(user_id: current_user.id).find(params[:id])
+      @mhash.destroy
+    end
 
     respond_to do |format|
       format.html { redirect_to mhashes_url }
@@ -44,7 +46,7 @@ class MhashesController < ApplicationController
   # Checks if mhash exists
   def verify
     @user = User.where(email: params[:email]).first
-    Rails.logger.debug("User: #{@user.email}")
+    Rails.logger.debug("User: #{@user && @user.email}")
     @mhash = @user && @user.mhashes.where(data: params[:data]).last
     Rails.logger.debug("Mhash: #{@mhash}")
     @check = @mhash != nil
