@@ -74,8 +74,9 @@ class MhashesController < ApplicationController
   # Checks if mhash exists
   def verify
     @user = User.where(email: params[:email]).first
-    @check = @user && @user.mhashes.where(data: params[:data]).first
-    @date = @check && @check.created_at rescue nil
+    @mhash = @user && @user.mhashes.where(data: params[:data]).first
+    @check = @mhash != nil
+    @date = @check ? @mhash.created_at : nil
 
     respond_to do |format|
       format.json { render json: { success: @check, date: @date } }
