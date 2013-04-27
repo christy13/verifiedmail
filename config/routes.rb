@@ -9,7 +9,8 @@ Verifiedmail::Application.routes.draw do
   match 'auth/failure', to: redirect('/')
   match 'signout', to: 'sessions#destroy', as: 'signout'
   match 'new/:data', to: 'mhashes#create', as: 'new'
-  get 'verify/:email/:data' => 'mhashes#verify', as: 'verify'
+  # get 'verify/:email/:data' => 'mhashes#verify', as: 'verify'
+  get 'verify' => 'mhashes#verify', as: 'verify'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
