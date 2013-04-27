@@ -1,6 +1,7 @@
 class MhashesController < ApplicationController
   # GET /mhashes
   # GET /mhashes.json
+  # eventually delete for security reasons
   def index
     if current_user
       @mhashes = Mhash.where(:user_id => current_user.id).all
@@ -9,33 +10,6 @@ class MhashesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @mhashes }
-    end
-  end
-
-  # GET /mhashes/1
-  # GET /mhashes/1.json
-  def show
-    if current_user
-      @mhash = Mhash.where(:user_id => current_user.id).find(params[:id])
-    end
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @mhash }
-    end
-  end
-
-  # GET /mhashes/new
-  # GET /mhashes/new.json
-  # eventually delete because don't want GUI involved
-  def new
-    if current_user
-      @mhash = Mhash.new
-    end
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @mhash }
     end
   end
 
@@ -50,11 +24,9 @@ class MhashesController < ApplicationController
 
     respond_to do |format|
       if @mhash.save
-        format.html { redirect_to @mhash, notice: 'Mhash was successfully created.' }
-        format.json { render json: @mhash, status: :created, location: @mhash }
+        render json: { success: true, date: @mhash.created_at }, status: :created, location: @mhash
       else
-        format.html { render action: "new" }
-        format.json { render json: @mhash.errors, status: :unprocessable_entity }
+        render json: { success: false, date: null }, status: :unprocessable_entity 
       end
     end
   end
@@ -82,8 +54,6 @@ class MhashesController < ApplicationController
     @date = @check ? @mhash.created_at : nil
     Rails.logger.debug("date: #{@date}")
 
-    respond_to do |format|
-      format.json { render json: { success: @check, date: @date } }
-    end
+    render json: { success: @check, date: @date }
   end
 end
