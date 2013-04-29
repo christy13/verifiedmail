@@ -46,13 +46,9 @@ class MhashesController < ApplicationController
   # Checks if mhash exists
   def verify
     @user = User.where(email: params[:email]).first
-    Rails.logger.debug("User: #{@user && @user.email}")
     @mhash = @user && @user.mhashes.where(data: params[:data]).last
-    Rails.logger.debug("Mhash: #{@mhash}")
     @check = @mhash != nil
-    Rails.logger.debug("Check: #{@check}")
     @date = @check ? @mhash.created_at : nil
-    Rails.logger.debug("date: #{@date}")
 
     render json: { success: @check, date: @date }
   end
