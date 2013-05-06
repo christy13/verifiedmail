@@ -1,0 +1,27 @@
+<h1>Listing rsakeys</h1>
+
+<table>
+  <tr>
+    <th>Public key</th>
+    <th>E private key</th>
+    <th>User</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @rsakeys.each do |rsakey| %>
+  <tr>
+    <td><%= rsakey.public_key %></td>
+    <td><%= rsakey.e_private_key %></td>
+    <td><%= rsakey.user_id %></td>
+    <td><%= link_to 'Show', rsakey %></td>
+    <td><%= link_to 'Edit', edit_rsakey_path(rsakey) %></td>
+    <td><%= link_to 'Destroy', rsakey, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Rsakey', new_rsakey_path %>

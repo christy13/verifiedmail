@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  public_key: MyString
+  e_private_key: MyString
+  user_id: 1
+
+two:
+  public_key: MyString
+  e_private_key: MyString
+  user_id: 1

@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Public key:</b>
+  <%= @rsakey.public_key %>
+</p>
+
+<p>
+  <b>E private key:</b>
+  <%= @rsakey.e_private_key %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @rsakey.user_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_rsakey_path(@rsakey) %> |
+<%= link_to 'Back', rsakeys_path %>

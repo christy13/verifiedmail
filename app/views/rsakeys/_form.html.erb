@@ -1,0 +1,29 @@
+<%= form_for(@rsakey) do |f| %>
+  <% if @rsakey.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@rsakey.errors.count, "error") %> prohibited this rsakey from being saved:</h2>
+
+      <ul>
+      <% @rsakey.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :public_key %><br />
+    <%= f.text_field :public_key %>
+  </div>
+  <div class="field">
+    <%= f.label :e_private_key %><br />
+    <%= f.text_field :e_private_key %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.number_field :user_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
