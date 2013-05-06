@@ -1,4 +1,7 @@
 Verifiedmail::Application.routes.draw do
+  resources :rsakeys
+
+
   resources :users
 
   resources :mhashes
