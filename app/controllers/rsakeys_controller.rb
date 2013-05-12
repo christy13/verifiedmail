@@ -54,7 +54,7 @@ class RsakeysController < ApplicationController
       @rsakey = Rsakey.new(params[:rsakey])
       @rsakey.public_key = params[:public_key]
       @rsakey.e_private_key = params[:e_private_key]
-      current_user.rsakey << @rsakey
+      current_user.rsakey = @rsakey
     end
 
     respond_to do |format|

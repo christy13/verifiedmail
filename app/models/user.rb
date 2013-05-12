@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   attr_accessible :email, :name
 
-  has_many :mhashes
-  has_one :rsakey
+  has_many :mhashes, dependent: :destroy
+  has_one :rsakey, dependent: :destroy
 
   def self.from_omniauth(auth)
     where(auth.slice("provider", "uid")).first || create_from_omniauth(auth)
