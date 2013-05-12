@@ -2,7 +2,9 @@ class RsakeysController < ApplicationController
   # GET /rsakeys
   # GET /rsakeys.json
   def index
-    @rsakeys = Rsakey.all
+    if current_user
+      @rsakeys = Rsakey.where(user_id: current_user.id).all
+    end
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,18 +15,19 @@ class RsakeysController < ApplicationController
   # GET /rsakeys/1
   # GET /rsakeys/1.json
   def show
-    @rsakey = Rsakey.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @rsakey }
+    if current_user
+      @rsakey = Rsakey.where(user_id: current_user.id).first
     end
+    render json: { public_key: @rsakey.public_key, 
+      e_private_key: @rsakey.e_private_key } }
   end
 
   # GET /rsakeys/new
   # GET /rsakeys/new.json
   def new
-    @rsakey = Rsakey.new
+    if current_user
+      @rsakey = Rsakey.new
+    end
 
     respond_to do |format|
       format.html # new.html.erb
@@ -34,21 +37,29 @@ class RsakeysController < ApplicationController
 
   # GET /rsakeys/1/edit
   def edit
-    @rsakey = Rsakey.find(params[:id])
+    if current_user
+      #user should only have 1 key
+      @rsakey = Rsakey.where(user_id: current_user.id).first
+    end
   end
 
   # POST /rsakeys
   # POST /rsakeys.json
   def create
-    @rsakey = Rsakey.new(params[:rsakey])
+    if current_user
+      @rsakey = Rsakey.new(params[:rsakey])
+      @rsakey.public_key = params[:public_key]
+      @rsakey.e_private_key = params[:e_private_key]
+      current_user.rsakeys << @rsakey
+    end
 
     respond_to do |format|
       if @rsakey.save
-        format.html { redirect_to @rsakey, notice: 'Rsakey was successfully created.' }
-        format.json { render json: @rsakey, status: :created, location: @rsakey }
+        render json: {success: true, key: @rsakey}, 
+          status: :created, location: @rsakey
       else
-        format.html { render action: "new" }
-        format.json { render json: @rsakey.errors, status: :unprocessable_entity }
+        render json: {success: false, key: @rsakey.errors}, 
+          status: :unprocessable_entity
       end
     end
   end
@@ -56,15 +67,17 @@ class RsakeysController < ApplicationController
   # PUT /rsakeys/1
   # PUT /rsakeys/1.json
   def update
-    @rsakey = Rsakey.find(params[:id])
+    if current_user
+      #user should only have 1 key
+      @rsakey = Rsakey.where(user_id: current_user.id).first
+    end
 
     respond_to do |format|
       if @rsakey.update_attributes(params[:rsakey])
-        format.html { redirect_to @rsakey, notice: 'Rsakey was successfully updated.' }
-        format.json { head :no_content }
+        render json: {success: true, key: @rsakey}
       else
-        format.html { render action: "edit" }
-        format.json { render json: @rsakey.errors, status: :unprocessable_entity }
+        render json: {success: false, key: @rsakey.errors}, 
+          status: :unprocessable_entity
       end
     end
   end
@@ -72,8 +85,11 @@ class RsakeysController < ApplicationController
   # DELETE /rsakeys/1
   # DELETE /rsakeys/1.json
   def destroy
-    @rsakey = Rsakey.find(params[:id])
-    @rsakey.destroy
+    if current_user
+      #user should only have 1 key
+      @rsakey = Rsakey.where(user_id: current_user.id).first
+      @rsakey.destroy
+    end
 
     respond_to do |format|
       format.html { redirect_to rsakeys_url }

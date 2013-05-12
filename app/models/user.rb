@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :name
 
   has_many :mhashes
+  has_one :rsakey
 
   def self.from_omniauth(auth)
     where(auth.slice("provider", "uid")).first || create_from_omniauth(auth)

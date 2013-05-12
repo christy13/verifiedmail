@@ -1,7 +1,6 @@
 Verifiedmail::Application.routes.draw do
   resources :rsakeys
 
-
   resources :users
 
   resources :mhashes
@@ -9,8 +8,11 @@ Verifiedmail::Application.routes.draw do
   match 'auth/:provider/callback', to: 'sessions#create'
   match 'auth/failure', to: redirect('/')
   match 'signout', to: 'sessions#destroy', as: 'signout'
-  get 'new', to: 'mhashes#create', as: 'new'
+  get 'new' => 'mhashes#create', as: 'new'
   get 'verify' => 'mhashes#verify', as: 'verify'
+  get 'my_keys' => 'rsakeys#show', as: 'show_keys'
+  post 'new_rsakey' => 'rsakeys#create', as: 'new_rsakey'
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -11,13 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130422023330) do
+ActiveRecord::Schema.define(:version => 20130506065056) do
 
   create_table "mhashes", :force => true do |t|
     t.integer  "user_id"
     t.string   "data"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "rsakeys", :force => true do |t|
+    t.string   "public_key"
+    t.string   "e_private_key"
+    t.integer  "user_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "users", :force => true do |t|
