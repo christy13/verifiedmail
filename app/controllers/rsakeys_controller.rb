@@ -19,7 +19,7 @@ class RsakeysController < ApplicationController
       @rsakey = Rsakey.where(user_id: current_user.id).first
     end
     render json: { public_key: @rsakey.public_key, 
-      e_private_key: @rsakey.e_private_key } }
+      e_private_key: @rsakey.e_private_key }
   end
 
   # GET /rsakeys/new
