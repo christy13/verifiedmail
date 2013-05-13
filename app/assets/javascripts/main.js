@@ -56,6 +56,7 @@ window.onload = function(){
     e.preventDefault();
     // retrieve PK, E(SK)
 
+    //remove
     var keys = JSON.parse(readCookie("rsa_keys"));
 
     publickeystring = keys["public_key"];
@@ -70,6 +71,8 @@ window.onload = function(){
       var message = $("#message_cr").val();
       signed_hash = openpgp.write_signed_message(privKey, message);
       console.log("Signed hash: "+signed_hash)
+
+      createCookie("signed_hash", signed_hash, 2); // remove
       
       // store signed_hash with time, email
       var hash_algo = privKey.getPreferredSignatureHashAlgorithm();
@@ -92,12 +95,33 @@ window.onload = function(){
     //retrieve PK for email, stored message hash
     // var stored_hash = verifiedmail.getHash(email, time);
 
-    // var pubKey = openpgp.read_publicKey(publickeystring)[0];
-    // var sig = new openpgp_packet_signature();
-    // sig.verify(signed_hash, pubKey);
+    //remove
+    var keys = JSON.parse(readCookie("rsa_keys"));
 
-    // var message = $("#message_ver").val();
-    
+    publickeystring = keys["public_key"];
+
+    var pubKey = openpgp.read_publicKey(publickeystring);
+    console.log(pubKey)
+    //var sig = new openpgp_packet_signature();
+    //sig.verify(signed_hash, pubKey);
+    var signed_hash = readCookie("signed_hash");
+    console.log(signed_hash)
+    var msg = openpgp.read_message(signed_hash);
+    console.log(msg)
+    var message = $("#message_ver").val();
+    console.log(message)
+    console.log(pubKey[0])
+    // var verified = msg[0].verifySignature(pubKey[0], 1);
+    var verified = msg[0].verifySignature(pubKey[0])
+    console.log(verified)
+    console.log(msg[0].text)
+    var comparetext = msg[0].text.replace(/\r\n/g,"").replace(/\n/g,"");
+    console.log(message)
+    console.log(comparetext)
+    console.log(message.replace(/\r\n/g,"\n").replace(/\n/g,"\r\n") != comparetext)
+    console.log(verified)
+    if (message !== comparetext) { verified = false}
+
     // var hash_algo = 8;
     // var message_MPIs = new openpgp_type_mpi().create(message);
     // var public_key_MPIs = pubKey.MPIs;
@@ -105,7 +129,7 @@ window.onload = function(){
     // var verified = openpgp_crypto_verifySignature(1, hash_algo, 
     //   message_MPIs, public_key_MPIs, message);
 
-    if (true) {
+    if (verified) {
       $("#success_ver").removeClass("hidden");
     } else {
       $("#failure_ver").removeClass("hidden");
@@ -117,6 +141,6 @@ window.onload = function(){
   $("#dec_sk_password").val("hello");
   $("#message_cr").val("arf arf");
   $("#message_ver").val("arf arf");
-  $("#from_email").val("me@me.edu");
+  $("#from_email").val("christy@mit.edu");
 
 }

@@ -1,4 +1,4 @@
-class WelcomeController < ApplicationController
+class WelcomeController < ApplicationControlle
 
   def index
     if current_user

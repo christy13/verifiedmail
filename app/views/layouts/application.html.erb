@@ -37,18 +37,11 @@
     <% if current_user %>    
       <%= hidden_field_tag "email", current_user.email %>
     <% end %>
-    
+    <%= hidden_field_tag "email", "christy@mit.edu" %> <!-- REMOVE -->
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<%= javascript_include_tag "jquery-1.9.1.min" %>')</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <%= javascript_include_tag "bootstrap.min" %>
     <%= javascript_include_tag "main" %>
     <%= javascript_include_tag "openpgp" %>
-    <script>
-    var _gaq=[['_setAccount','UA-32860580-1'],['_trackPageview']];
-    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-      g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-      s.parentNode.insertBefore(g,s)}(document,'script'));
-    </script>
   </body>
   </html>
