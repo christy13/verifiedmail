@@ -60,6 +60,6 @@ module Verifiedmail
     config.assets.version = '1.0'
 
     # Enforce SSL
-    #config.force_ssl = true
+    config.force_ssl = true
   end
 end
