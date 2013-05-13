@@ -1,0 +1,16 @@
+
+            <img class="header img-rounded" src="assets/email.jpg" alt="VerifiedMail">
+                
+            <!-- Main hero unit for a primary marketing message or call to action -->
+            <div class="hero-unit">
+                <h1>VerifiedMail</h1>
+                <p>Easy email verification</p>
+                <p>
+                    <% unless current_user %>
+                        <%= link_to "Sign in with Facebook", "/auth/facebook", class: "btn btn-large btn-primary", id: "facebook_login" %>
+                        <%= link_to "Sign in with Google", "/auth/facebook", class: "btn btn-large btn-primary", id: "google_login" %>
+                    <% end %>
+              </p>
+
+        
+            </div>

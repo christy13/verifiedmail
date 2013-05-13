@@ -8,8 +8,14 @@ Verifiedmail::Application.routes.draw do
   match 'auth/:provider/callback', to: 'sessions#create'
   match 'auth/failure', to: redirect('/')
   match 'signout', to: 'sessions#destroy', as: 'signout'
+  match 'login', to: 'welcome#login', as: 'login'
+  match 'sign', to: 'welcome#sign', as: 'sign'
+  match 'verify', to: 'welcome#verify', as: 'verify'
+  match 'about', to: 'welcome#about', as: 'about'
+  match 'index', to: 'welcome#index', as: 'index'
+
   get 'new' => 'mhashes#create', as: 'new'
-  get 'verify' => 'mhashes#verify', as: 'verify'
+  get 'hash_verify' => 'mhashes#verify', as: 'hash_verify'
   get 'my_keys' => 'rsakeys#show', as: 'show_keys'
   get 'new_rsakey' => 'rsakeys#create', as: 'new_rsakey'
 

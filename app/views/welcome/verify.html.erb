@@ -1,0 +1,40 @@
+
+
+<!-- Main hero unit for a primary marketing message or call to action -->
+<div class="hero-unit">
+  <h1>VerifiedMail</h1>
+  <p>Easy email verification</p>
+
+  <form class="form-horizontal" id="verify">
+    <legend>Verify Email Authenticity</legend>
+    <div class="alert alert-success hidden" id="success_ver">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <h4>Success!</h4>
+      Successfully verified message.
+    </div>
+    <div class="alert alert-error hidden" id="failure_ver">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <h4>Failure!</h4>
+      Verification failed.
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="inputVerifyMessage">Paste email</label>
+
+      <div class="controls">
+        <textarea class="input-block-level" id="inputVerifyMessage" rows="10" placeholder="Email Text"></textarea>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="inputAddress">From:</label>
+
+      <div class="controls">
+        <input type="email" class="input-xlarge" id="inputAddress" placeholder="friend@example.com">
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn" id="verify_submit">Verify</button>
+      </div>
+    </div>
+  </form>
+</div>

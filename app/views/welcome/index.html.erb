@@ -1,0 +1,31 @@
+
+
+<!-- Main hero unit for a primary marketing message or call to action -->
+<div class="hero-unit">
+    <h1>VerifiedMail</h1>
+    <p>Easy email verification</p>
+
+    <form class="form-horizontal" id="generate">
+        <legend>RSA Key Generation</legend>
+        <div class="alert alert-success hidden" id="success_gen">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <h4>Success!</h4>
+          Successfully generated RSA keypair.
+      </div>
+      <div class="alert alert-error hidden" id="failure_gen">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <h4>Failure!</h4>
+          Unable to generate RSA keypair.
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="enc_sk_password">Password for encryption</label>
+        <div class="controls">
+            <div class="input-append">
+                <input type="password" class="input-xlarge" id="enc_sk_password" placeholder="Enter a strong password…">
+                <button type="submit" class="btn" id="generate_submit">Generate</button>
+
+            </div>
+        </div>
+    </div>
+</form>
+</div>

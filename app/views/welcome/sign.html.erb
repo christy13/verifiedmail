@@ -1,0 +1,39 @@
+
+
+<!-- Main hero unit for a primary marketing message or call to action -->
+<div class="hero-unit">
+  <h1>VerifiedMail</h1>
+  <p>Easy email verification</p>
+
+  <form class="form-horizontal" id="hash">
+    <legend>Digitally Sign Email</legend>
+    <div class="alert alert-success hidden" id="success_hash">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <h4>Success!</h4>
+      Successfully hashed and uploaded message.
+    </div>
+    <div class="alert alert-error hidden" id="failure_hash">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <h4>Failure!</h4>
+      Unable to decrypt secret key.
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="message_cr">Paste email</label>
+      <div class="controls">
+        <textarea class="input-block-level" id="message_cr" rows="10" placeholder="Email Text"></textarea>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="dec_sk_password">Password for decryption</label>
+      <div class="controls">
+        <input type="password" class="input-xlarge" id="dec_sk_password" placeholder="Enter a strong password…">
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn" id="hash_submit">Hash</button>
+      </div>
+    </div>
+  </form>
+
+</div>
