@@ -1,7 +1,6 @@
 class WelcomeController < ApplicationController
 
   def index
-    current_user = true
     if current_user
       respond_to do |format|
         format.html
@@ -18,7 +17,6 @@ class WelcomeController < ApplicationController
   end
 
   def sign
-    current_user = true
     if current_user
       respond_to do |format|
         format.html
@@ -29,7 +27,6 @@ class WelcomeController < ApplicationController
   end
 
   def verify
-    current_user = true
     if current_user
       respond_to do |format|
         format.html
@@ -40,7 +37,6 @@ class WelcomeController < ApplicationController
   end
 
   def about
-    current_user = true
     if current_user
       respond_to do |format|
         format.html

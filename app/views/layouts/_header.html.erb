@@ -1,29 +1,33 @@
-
-
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="#">VerifiedMail</a>
-                    <div class="nav-collapse collapse">
-                        <ul class="nav">
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="sign.html">Sign</a></li>
-                            <li><a href="verify.html">Verify</a></li>
-                            <li><a href="about.html">About</a></li>
-                        </ul>
-                        <% if current_user %>
-                            <div class="pull-right">
-                                <%= link_to "Sign Out", signout_path, class: "btn" %>
-                                <%= hidden_field_tag "email", current_user.email %>
-                            </div>
-                        <% end %>
-                        <%= hidden_field_tag "email", "christy@mit.edu" %>
-                    </div><!--/.nav-collapse -->
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/">VerifiedMail</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <%= nav_link 'Home', '/' %>
+                    <%= nav_link 'Sign', '/sign' %>
+                    <%= nav_link 'Verify', '/verify' %>
+                    <%= nav_link 'About', '/about' %>
+                </ul>
+                <% if current_user %>
+                <div class="pull-right">
+                    <ul class="nav">
+                        <li><a href="#"><%= current_user.name %></a></li>
+                    </ul>
+                    <%= link_to "Sign Out", signout_path, class: "btn" %>
                 </div>
-            </div>
+                <% end %>
+                <% unless current_user %>
+                    <div class="pull-right">
+                    <%= link_to "Sign In", '/auth/facebook', class: "btn", id: "facebook_login" %>
+                </div>
+                <% end %>
+            </div><!--/.nav-collapse -->
         </div>
+    </div>
+</div>
