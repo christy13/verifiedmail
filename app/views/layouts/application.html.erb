@@ -34,10 +34,6 @@
       <%= render partial: "layouts/footer" %>
 
     </div> <!-- /container -->
-    <% if current_user %>    
-      <%= hidden_field_tag "email", current_user.email %>
-    <% end %>
-    <%= hidden_field_tag "email", "christy@mit.edu" %> <!-- REMOVE -->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <%= javascript_include_tag "bootstrap.min" %>
