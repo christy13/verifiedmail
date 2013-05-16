@@ -70,7 +70,8 @@ window.onload = function(){
     e.preventDefault();
 
     // Generates RSA keys with SK encrypted with password
-    var keyPair = openpgp.generate_key_pair(1, 1024, $('#email').val(), 
+    var email = "you@example.com";  // email doesn't really matter here
+    var keyPair = openpgp.generate_key_pair(1, 1024, email, 
       $("#enc_sk_password").val());
     
     publickeystring = keyPair.publicKeyArmored;
