@@ -15,7 +15,8 @@ ActiveRecord::Schema.define(:version => 20130506065056) do
 
   create_table "mhashes", :force => true do |t|
     t.integer  "user_id"
-    t.string   "data"
+    t.string   "signed"
+    t.string   "unsigned"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

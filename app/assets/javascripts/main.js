@@ -1,89 +1,124 @@
 window.onload = function(){
   openpgp.init();
 
-  function createCookie(name, value, days) {
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        var expires = "; expires=" + date.toGMTString();
-    } else var expires = "";
-    document.cookie = escape(name) + "=" + escape(value) + expires + "; path=/";
-  }
-
-  function readCookie(name) {
-      var nameEQ = escape(name) + "=";
-      var ca = document.cookie.split(';');
-      for (var i = 0; i < ca.length; i++) {
-          var c = ca[i];
-          while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-          if (c.indexOf(nameEQ) == 0) return unescape(c.substring(nameEQ.length, c.length));
-      }
-      return null;
-  }
-
-  function eraseCookie(name) {
-      createCookie(name, "", -1);
-  }
-
+  // OpenPGPjs will not work without this
   function showMessages(str){
     console.log(str);
   }
 
-  var publickeystring;
-  var privatekeystring;
-  var enc_privatekey;
-  var signed_hash;
-  var stored_hash;
+  //// Global Variables
+  var serverURL = "https://verifiedmail.herokuapp.com/";
+  var hash_algo = 8;  // SHA-256, http://tools.ietf.org/html/rfc4880#section-9.4
+  var objectSelector = 0;  // Select OpenPGPjs object from list
 
+  //// Helper functions
+
+  // Sends new keys to server
+  function uploadKeys(pk, esk) {
+    var data = JSON.stringify({public_key: pk, e_secret_key: esk});
+    var query = "new_rsakey";
+    var resp = $.post(serverURL+query, data);
+    return JSON.parse(resp);
+  }
+
+  // Retrieves keys from server
+  function getKeys() {
+    var query = "show_keys";
+    var resp = $.get(serverURL+query);
+    return JSON.parse(resp);
+  }
+
+  // Retrieves public key from server
+  function getPublicKey(email) {
+    var query = "show_public_key"+"?email="+email;
+    var resp = $.get(serverURL+query);
+    return JSON.parse(resp);
+  }
+
+  // Uploads signed and unsigned hashes
+  function uploadHashes(signed_hash, unsigned_hash) {
+    var data = JSON.stringify({signed: signed_hash, 
+      unsigned: unsigned_hash});
+    var query = "new_mhashes";
+    var resp = $.post(serverURL+query, data);
+    return JSON.parse(resp);
+  }
+
+  // Retrieves signed hashes
+  function getSignedHash(email, unsigned_hash) {
+    var query = "show_signed_hash"+"?email="+email+"&unsigned="+unsigned_hash;
+    var resp = $.get(serverURL+query);
+    return JSON.parse(resp);
+  }
+
+  // Display success message
+  function displayResult(success) {
+    if (success) {
+      $(".success_message").removeClass("hidden");
+      $(".failure_message").addClass("hidden");
+    } else {
+      $(".failure_message").removeClass("hidden");
+      $(".success_message").addClass("hidden");
+    }
+    return false;
+  }
+
+  //// Main functions
+
+  // Generates 1024-bit RSA keys for logged in user
   $("#generate_submit").click(function(e){
     e.preventDefault();
+
+    // Generates RSA keys with SK encrypted with password
     var keyPair = openpgp.generate_key_pair(1, 1024, $('#email').val(), 
       $("#enc_sk_password").val());
     
     publickeystring = keyPair.publicKeyArmored;
-    privatekeystring = keyPair.privateKeyArmored;
+    eprivatekeystring = keyPair.privateKeyArmored;
 
-    // remove
-    createCookie("rsa_keys", 
-      JSON.stringify({"public_key": publickeystring, "private_key": privatekeystring}), 
-      2);
+    // Upload keys to server
+    var resp = uploadKeys(publickeystring, eprivatekeystring);
 
-    $("#success_gen").removeClass("hidden");
-    return false;
+    // Display success/failure
+    var success = (resp['success'] == 'true');
+    displayResult(success);
+
+    return false;  // Prevent event from bubbling up
   });
 
   $("#hash_submit").click(function(e){
     e.preventDefault();
-    // retrieve PK, E(SK)
-
-    //remove
-    var keys = JSON.parse(readCookie("rsa_keys"));
-
+    
+    // Retrieve keys
+    var keys = getKeys();
     publickeystring = keys["public_key"];
-    privatekeystring = keys["private_key"];
-    console.log(privatekeystring)
+    privatekeystring = keys["e_private_key"];
 
+    // Decrypt private key
     var privKey = openpgp.read_privateKey(privatekeystring)[0];
     var password = $("#dec_sk_password").val();
     var proceed = privKey.decryptSecretMPIs(password)
 
+    // If private key decrypts with password
     if (proceed) {
+      // Create unsigned hash of message
+      var unsigned_hash = openpgp_crypto_hashData(hash_algo, message);
+      
+      // Create signed hash of message
       var message = $("#message_cr").val();
-      signed_hash = openpgp.write_signed_message(privKey, message);
+      var signed_hash = openpgp.write_signed_message(privKey, unsigned_hash);
       console.log("Signed hash: "+signed_hash)
 
-      createCookie("signed_hash", signed_hash, 2); // remove
+      // Upload signed hash and unsigned hash of message
+      var resp = uploadHashes(signed_hash, unsigned_hash);
+      var success = (resp['success'] == 'true');
       
-      // store signed_hash with time, email
-      var hash_algo = privKey.getPreferredSignatureHashAlgorithm();
-      console.log("hash_algo:"+hash_algo)
-
-      stored_hash = openpgp_crypto_hashData(hash_algo, message); //remove
-
-      $("#success_hash").removeClass("hidden");
+      // Display success/failure message
+      displayResult(success);
+      console.log("Uploading hashes failed")
     } else {
       console.log("Private key encryption failed")
-      $("#failure_hash").removeClass("hidden");
+      displayResult(false);
     }
     return false;
   });
@@ -92,51 +127,40 @@ window.onload = function(){
     e.preventDefault();
     var email = $("#from_email");
 
-    //retrieve PK for email, stored message hash
-    // var stored_hash = verifiedmail.getHash(email, time);
-
-    //remove
-    var keys = JSON.parse(readCookie("rsa_keys"));
-
-    publickeystring = keys["public_key"];
-
-    var pubKey = openpgp.read_publicKey(publickeystring);
-    console.log(pubKey)
-    //var sig = new openpgp_packet_signature();
-    //sig.verify(signed_hash, pubKey);
-    var signed_hash = readCookie("signed_hash");
-    console.log(signed_hash)
-    var msg = openpgp.read_message(signed_hash);
-    console.log(msg)
+    // Retrieve message hash
     var message = $("#message_ver").val();
-    console.log(message)
-    console.log(pubKey[0])
-    // var verified = msg[0].verifySignature(pubKey[0], 1);
-    var verified = msg[0].verifySignature(pubKey[0])
-    console.log(verified)
-    console.log(msg[0].text)
-    var comparetext = msg[0].text.replace(/\r\n/g,"").replace(/\n/g,"");
-    console.log(message)
-    console.log(comparetext)
-    console.log(message.replace(/\r\n/g,"\n").replace(/\n/g,"\r\n") != comparetext)
-    console.log(verified)
-    if (message !== comparetext) { verified = false}
+    var local_message_hash = openpgp_crypto_hashData(hash_algo, message);
+    var signed_hash = getSignedHash(email, local_message_hash);
 
-    // var hash_algo = 8;
-    // var message_MPIs = new openpgp_type_mpi().create(message);
-    // var public_key_MPIs = pubKey.MPIs;
-    // console.log("hash_algo:"+hash_algo)
-    // var verified = openpgp_crypto_verifySignature(1, hash_algo, 
-    //   message_MPIs, public_key_MPIs, message);
+    // Retrieve PK
+    var pk = getPublicKey(email);
+    var proceed = (pk['success'] == 'true');
 
-    if (verified) {
-      $("#success_ver").removeClass("hidden");
+    // If public key is retrieved
+    if (proceed) {
+      // Create key and message objects for PGP library
+      var publickeystring = pk["public_key"];
+      var pubKey = openpgp.read_publicKey(publickeystring);
+      var signed_hash_obj = openpgp.read_message(signed_hash);
+      
+      // Verify server signed hash
+      var verify_server_hash = signed_hash_obj[objectSelector].verifySignature(pubKey[objectSelector]);
+
+      // Verify local == server message hash
+      var server_message_hash = signed_hash_obj[objectSelector].text.replace(/\r\n/g,"").replace(/\n/g,"");
+      var verify_message_hash = (local_message_hash == server_message_hash);
+      var verified = (verify_message_hash && verify_server_hash);
+
+      // Display success/failure message
+      displayResult(verified);
     } else {
-      $("#failure_ver").removeClass("hidden");
+      // Display success/failure message
+      displayResult(false);
     }
     return false;
   });
 
+  // For Demo
   $("#enc_sk_password").val("hello");
   $("#dec_sk_password").val("hello");
   $("#message_cr").val("arf arf");

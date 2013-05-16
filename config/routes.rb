@@ -5,19 +5,26 @@ Verifiedmail::Application.routes.draw do
 
   resources :mhashes
 
+  # OAuth
   match 'auth/:provider/callback', to: 'sessions#create'
   match 'auth/failure', to: redirect('/')
   match 'signout', to: 'sessions#destroy', as: 'signout'
+  
+  # Demo links
   match 'login', to: 'welcome#login', as: 'login'
   match 'sign', to: 'welcome#sign', as: 'sign'
   match 'verify', to: 'welcome#verify', as: 'verify'
   match 'about', to: 'welcome#about', as: 'about'
   match 'index', to: 'welcome#index', as: 'index'
 
-  get 'new' => 'mhashes#create', as: 'new'
-  get 'hash_verify' => 'mhashes#verify', as: 'hash_verify'
-  get 'my_keys' => 'rsakeys#show', as: 'show_keys'
-  get 'new_rsakey' => 'rsakeys#create', as: 'new_rsakey'
+  # Message Hashes
+  post 'new_mhashes' => 'mhashes#create', as: 'new'
+  get 'show_signed_hash' => 'mhashes#show_signed_hash', as: "show_signed_hash"
+
+  # Key routes
+  get 'show_keys' => 'rsakeys#show', as: 'show_keys'
+  get 'show_public_key' => 'rsakeys#show_public_key', as: 'show_public_key'
+  post 'new_rsakey' => 'rsakeys#create', as: 'new_rsakey'
 
 
   # The priority is based upon order of creation:

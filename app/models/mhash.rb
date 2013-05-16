@@ -1,4 +1,4 @@
 class Mhash < ActiveRecord::Base
-  attr_accessible :data, :user_id
+  attr_accessible :signed, :unsigned, :user_id
   belongs_to :user
 end

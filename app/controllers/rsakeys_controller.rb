@@ -16,13 +16,22 @@ class RsakeysController < ApplicationController
   # GET /rsakeys/1.json
   def show
     if current_user
-      @rsakey = Rsakey.where(user_id: current_user.id).first
-    end
-    if @rsakey
-      render json: { public_key: @rsakey.public_key, 
-        e_private_key: @rsakey.e_private_key }
+      @rsakey = Rsakey.where(user_id: current_user.id).last
+      if @rsakey
+        render json: {success: true, public_key: @rsakey.public_key, 
+          e_private_key: @rsakey.e_private_key }
+      end
     else
-      render json: {public_key: "nil", e_private_key: "nil"}
+      render json: {success: false, public_key: "nil", e_private_key: "nil"}
+    end
+  end
+
+  def show_public_key
+    @rsakey = Rsakey.where(email: params[:email]).last
+    if @rsakey
+      render json: {success: true, public_key: @rsakey.public_key}
+    else
+      render json: {success: false, public_key: "nil", e_private_key: "nil"}
     end
   end
 
@@ -51,7 +60,7 @@ class RsakeysController < ApplicationController
   # POST /rsakeys.json
   def create
     if current_user
-      @rsakey = Rsakey.new(params[:rsakey])
+      @rsakey = Rsakey.new
       @rsakey.public_key = params[:public_key]
       @rsakey.e_private_key = params[:e_private_key]
       current_user.rsakey = @rsakey

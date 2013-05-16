@@ -13,12 +13,25 @@ class MhashesController < ApplicationController
     end
   end
 
+  def show_signed_hash
+    @mhash = Mhash.where(email: params[:email]).
+      where(unsigned: params[:unsigned]).last
+
+    if @mhash
+      render json: { success: true, date: @mhash.created_at, 
+        signed: @mhash.signed }, status: :created, location: @mhash
+    else
+      render json: { success: false, date: null }, status: :unprocessable_entity
+    end
+  end
+
   # POST /mhashes
   # POST /mhashes.json
   def create
     if current_user
       @mhash = Mhash.new
-      @mhash.data = params[:data]
+      @mhash.signed = params[:signed]
+      @mhash.unsigned = params[:unsigned]
       current_user.mhashes << @mhash
     end
 
@@ -41,15 +54,5 @@ class MhashesController < ApplicationController
       format.html { redirect_to mhashes_url }
       format.json { head :no_content }
     end
-  end
-
-  # Checks if mhash exists
-  def verify
-    @user = User.where(email: params[:email]).first
-    @mhash = @user && @user.mhashes.where(data: params[:data]).last
-    @check = @mhash != nil
-    @date = @check ? @mhash.created_at : nil
-
-    render json: { success: @check, date: @date }
   end
 end
